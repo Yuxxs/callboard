@@ -32,6 +32,7 @@ class CreateModerationsTable extends Migration
 
             $table->string('reason',80);
             $table->timestamp('moderation_date');
+            $table->timestamps();
 
         });
         Schema::table('moderations', function (Blueprint $table)

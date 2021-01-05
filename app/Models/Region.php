@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
     use HasFactory,UuidTrait;
-    public $timestamps = false;
     protected $table = 'regions';
+    public function cities(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(City::class);
+    }
 }

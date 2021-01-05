@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory,UuidTrait;
-    public $timestamps = false;
+
     protected $table = 'roles';
-    public function permissions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function permissions(): \Illuminate\Database\Eloquent\Relations\belongsToMany
     {
-        return $this->hasMany(Permission::class);
+        return $this->belongsToMany(Permission::class);
     }
+    public function users(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
 }

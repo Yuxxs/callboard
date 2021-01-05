@@ -11,11 +11,13 @@ class Category extends Model
     use HasFactory,UuidTrait;
     protected $table = 'categories';
 
-    public function parent()
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('Category', 'parent_id');
     }
-
-    public $timestamps = false;
+    public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Ad::class);
+    }
 
 }

@@ -13,7 +13,15 @@ class Moderation extends Model
 
     public function oldVersion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('Moderation', 'previous_id');
+        return $this->belongsTo(Moderation::class, 'previous_id');
+    }
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function ad(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Ad::class);
     }
 
 

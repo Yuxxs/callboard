@@ -42,12 +42,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function role(): \Illuminate\Database\Eloquent\Relations\hasOne
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
-    public function status(): \Illuminate\Database\Eloquent\Relations\hasOne
+    public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(UserStatus::class);
+        return $this->belongsTo(UserStatus::class);
+    }
+    public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Ad::class);
+    }
+    public function moderations(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Moderation::class);
     }
 }
