@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+
+   app:
+      build:
+        context: ./
+        dockerfile: Dockerfile
+      container_name: ${COMPOSE_PROJECT_NAME}_app
+      restart: unless-stopped
+      volumes:
+        - ./:/var/www
+      networks:
+        - sail
+      depends_on:
+        - postgres
+        - rabbitmq
+   rabbitmq:
+      image: rabbitmq
+      container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+      environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASSWORD: guest
+        RABBITMQ_DEFAULT_VHOST: /
+        RABBITMQ_SSL_CACERTFILE: /rootCA.pem
+        RABBITMQ_SSL_CERTFILE: /rootCA.pem
+        RABBITMQ_SSL_KEYFILE: /rootCAkey.pem
+        RABBITMQ_SSL_VERIFY: verify_none
+        RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: "false"
+      volumes:
+       - "./rootCA.pem:/rootCA.pem:ro"
+       - "./rootCAkey.pem:/rootCAkey.pem:ro"
+      ports:
+        - 15671:15671
+        - 15672:15672
+        - 5671:5671
+        - 5672:5672
+      networks:
+        - sail
+
+   postgres:
+      image: postgres:12-alpine
+      container_name: ${COMPOSE_PROJECT_NAME}_postgres
+      restart: unless-stopped
+      volumes:
+        - "./containers/postgres:/var/lib/postgresql/data"
+      environment:
+        - POSTGRES_PORT=${DB_PORT}
+        - POSTGRES_HOST=${DB_HOST}
+        - POSTGRES_DB=${DB_NAME}
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_USERNAME=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_HOST_AUTH_METHOD=trust
+      ports:
+        - 5432:5432
+      networks:
+        - sail
+   nginx:
+      image: nginx:alpine
+      container_name: ${COMPOSE_PROJECT_NAME}_nginx
+      restart: unless-stopped
+      ports:
+        - 8000:80
+      volumes:
+        - ./:/var/www
+        - ./containers/nginx:/etc/nginx/conf.d/
+      networks:
+        - sail
+      depends_on:
+        - postgres
+networks:
+   sail:
+      driver: bridge
