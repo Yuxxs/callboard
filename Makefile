@@ -14,7 +14,7 @@ endif
 project=-p ${COMPOSE_PROJECT_NAME}
 service=${COMPOSE_PROJECT_NAME}:latest
 
-deploy: build-no-cache start composer-install key-generate migrate config-cache
+deploy: build-no-cache start composer-install key-generate config-cache
 
 build:
 	@docker-compose -f docker-compose.yml build

@@ -16,7 +16,8 @@
     1.Clone this repository from GitHub.
     2.Edit .env and set necessary user/password for Postgres.
     3.Run make deploy.
-    4.Delete all from containers/postgres/ if it exists
+    4.Run make migrate.
+    5.Delete all from containers/postgres/ if something exist in it.
 ## Start and stop environment
 Please use next make commands in order to start and stop environment:
     
