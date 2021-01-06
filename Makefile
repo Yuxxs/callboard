@@ -14,7 +14,7 @@ endif
 project=-p ${COMPOSE_PROJECT_NAME}
 service=${COMPOSE_PROJECT_NAME}:latest
 
-deploy: build-no-cache start composer-install key-generate migrate
+deploy: build-no-cache start composer-install key-generate migrate config-cache
 
 build:
 	@docker-compose -f docker-compose.yml build
@@ -62,4 +62,5 @@ migrate-refresh:
 
 seed:
 	@make exec cmd="php artisan db:seed --force"
-
+config-cache:
+	@make exec cmd="php artisan config:cache"
