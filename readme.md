@@ -25,3 +25,4 @@ Please use next make commands in order to start and stop environment:
     make stop
 
 Tested on Ubuntu 20.04
+Running on 0.0.0.0:8000
