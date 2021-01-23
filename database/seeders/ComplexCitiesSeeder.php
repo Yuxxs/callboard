@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ComplexSeeder extends Seeder
+class ComplexCitiesSeeder extends Seeder
 {
     /**
      * Run the database seeds.

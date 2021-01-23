@@ -2,7 +2,6 @@ FROM php:7.4-fpm
 
 
 
-ENV PHP_VERSION 7.4
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
@@ -13,6 +12,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip
+
+
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

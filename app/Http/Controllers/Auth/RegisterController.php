@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
+use App\Models\UserStatus;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -29,7 +33,12 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected function redirectTo(): string
+    {
+            if(Auth::user()->role->slug=='user')
+                return route('user_home');
+            else return route('register');
+    }
 
     /**
      * Create a new controller instance.
@@ -50,7 +59,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:60'],
+            'surname' => ['required', 'string', 'max:60'],
+            'middlename' => ['required', 'string', 'max:60'],
+            'phone' => ['required', 'string', 'max:16', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -62,12 +74,23 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    protected function create(array $data): User
     {
-        return User::create([
+
+        $user = new User([
+            'id' =>Str::uuid(),
             'name' => $data['name'],
+            'surname' => $data['surname'],
+            'middlename' => $data['middlename'],
+            'phone' => $data['phone'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => bcrypt($data['password']),
         ]);
+        $role = Role::where('slug','user')->first();
+        $status = UserStatus::where('slug','waiting')->first();
+        $user->role()->associate($role);
+        $user->status()->associate($status);
+        $user->save();
+        return $user;
     }
 }

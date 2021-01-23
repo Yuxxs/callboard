@@ -15,21 +15,42 @@ services:
       depends_on:
         - postgres
         - rabbitmq
+        - redis
+        - mailhog
+   redis:
+      image: redis:alpine
+      container_name: ${COMPOSE_PROJECT_NAME}_redis
+      ports:
+       - 6379:6379
+      volumes:
+       - ./redis:/var/www
+      networks:
+       - sail
+
+   mailhog:
+      image: mailhog/mailhog
+      container_name: ${COMPOSE_PROJECT_NAME}_mailhog
+      environment:
+        MAIL_MAILER: ${MAIL_MAILER}
+        MAIL_HOST: ${MAIL_HOST}
+        MAIL_PORT: ${MAIL_PORT}
+        MAIL_USERNAME: ${MAIL_USERNAME}
+        MAIL_PASSWORD: ${MAIL_PASSWORD}
+        MAIL_ENCRYPTION: ${MAIL_ENCRYPTION}
+      ports:
+        - 1025:1025
+        - 8025:8025
+      networks:
+       - sail
+      external_links:
+        - mailhog
    rabbitmq:
-      image: rabbitmq
+      image: rabbitmq:management
       container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
       environment:
         RABBITMQ_DEFAULT_USER: guest
         RABBITMQ_DEFAULT_PASSWORD: guest
         RABBITMQ_DEFAULT_VHOST: /
-        RABBITMQ_SSL_CACERTFILE: /rootCA.pem
-        RABBITMQ_SSL_CERTFILE: /rootCA.pem
-        RABBITMQ_SSL_KEYFILE: /rootCAkey.pem
-        RABBITMQ_SSL_VERIFY: verify_none
-        RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: "false"
-      volumes:
-       - "./rootCA.pem:/rootCA.pem:ro"
-       - "./rootCAkey.pem:/rootCAkey.pem:ro"
       ports:
         - 15671:15671
         - 15672:15672
@@ -37,6 +58,7 @@ services:
         - 5672:5672
       networks:
         - sail
+
 
    postgres:
       image: postgres:12-alpine

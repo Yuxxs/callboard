@@ -18,9 +18,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
+        'middlename',
+        'surname',
+        'phone',
+        'phone_calls_time',
         'email',
         'password',
+
     ];
 
     /**
@@ -44,11 +50,11 @@ class User extends Authenticatable
 
     public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class,'role_id');
     }
     public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(UserStatus::class);
+        return $this->belongsTo(UserStatus::class,'status_id');
     }
     public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany
     {

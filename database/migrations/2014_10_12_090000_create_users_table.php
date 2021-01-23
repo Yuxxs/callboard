@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->uuid('id')->primary();
 
             $table->uuid('status_id');
-            $table->foreign('status_id')->references('id')->on('ad_statuses');
+            $table->foreign('status_id')->references('id')->on('user_statuses');
             $table->index('status_id');
 
             $table->uuid('role_id');
@@ -30,8 +30,8 @@ class CreateUsersTable extends Migration
             $table->string('phone',16)->unique();
             $table->string('email',50)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password',16);
-            $table->string('phone_calls_time',200);
+            $table->string('password',80);
+            $table->string('phone_calls_time',200)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

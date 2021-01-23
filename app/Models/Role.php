@@ -14,6 +14,10 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class);
     }
+    public function has_permission($slug)
+    {
+        return $this->permissions()->contains(Permissions::where('slug',$slug)->value('id'));
+    }
     public function users(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(User::class);

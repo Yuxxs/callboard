@@ -30,12 +30,11 @@ return [
 
     'connections' => [
 
-        'rabbitmq' => [
 
+        'rabbitmq' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_QUEUE', 'default'),
             'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
-
             'hosts' => [
                 [
                     'host' => env('RABBITMQ_HOST', '127.0.0.1'),
@@ -45,7 +44,6 @@ return [
                     'vhost' => env('RABBITMQ_VHOST', '/'),
                 ],
             ],
-
             'options' => [
                 'ssl_options' => [
                     'cafile' => env('RABBITMQ_SSL_CAFILE', null),
@@ -54,17 +52,15 @@ return [
                     'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
                     'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
                 ],
-                'queue' => [
-                    'job' => VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob::class,
-                ],
             ],
-
             /*
              * Set to "horizon" if you wish to use Laravel Horizon.
              */
             'worker' => env('RABBITMQ_WORKER', 'default'),
-
         ],
+
+
+
         'sync' => [
             'driver' => 'sync',
         ],
@@ -93,7 +89,7 @@ return [
             'suffix' => env('SQS_SUFFIX'),
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
         ],
-        /*
+
                'redis' => [
                    'driver' => 'redis',
                    'connection' => 'default',
@@ -101,7 +97,7 @@ return [
                    'retry_after' => 90,
                    'block_for' => null,
                ],
-        */
+
 
     ],
 
