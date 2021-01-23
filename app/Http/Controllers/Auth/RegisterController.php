@@ -37,6 +37,10 @@ class RegisterController extends Controller
     {
             if(Auth::user()->role->slug=='user')
                 return route('user_home');
+            elseif(Auth::user()->role->slug=='moderator')
+                return route('moderator_home');
+            elseif(Auth::user()->role->slug=='admin')
+                return route('admin_home');
             else return route('register');
     }
 
