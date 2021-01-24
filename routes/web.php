@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+use App\Http\Requests\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,17 @@ Route::get('/email/verify', function () {
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+if($request->authorize()){
     $request->fulfill();
-
-    return redirect('/home');
+    if($request->user()->role->slug=='user')
+        return redirect(route('user_home'));
+    elseif($request->user()->role->slug=='moderator')
+        return redirect(route('moderator_home'));
+    elseif($request->user()->role->slug=='admin')
+        return redirect(route('admin_home'));
+    else redirect(route('login'));
+}
+else redirect(route('login'));
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {

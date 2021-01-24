@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserStatus;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller
@@ -22,11 +25,7 @@ class VerificationController extends Controller
 
     use VerifiesEmails;
 
-    /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
+
     protected function redirectTo(): string
     {
         if(Auth::user()->role->slug=='user')
@@ -37,7 +36,20 @@ class VerificationController extends Controller
             return route('admin_home');
         else return route('login');
     }
+    public function authorize(Request $request)
+    {
+        if (! hash_equals((string) $request->route('id'),
+            (string) $request->user()->getKey())) {
+            return false;
+        }
 
+        if (! hash_equals((string) $request->route('hash'),
+            sha1($request->user()->getEmailForVerification()))) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Create a new controller instance.
      *

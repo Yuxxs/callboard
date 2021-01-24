@@ -80,7 +80,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data): User
     {
-
         $user = new User([
             'id' =>Str::uuid(),
             'name' => $data['name'],

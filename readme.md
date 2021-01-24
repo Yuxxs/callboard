@@ -12,12 +12,15 @@
     2. PHP 7.4 fpm
     3. Postgres 12:alpine
     4. Laravel 8
+    5. Mailhog
+    6. RabbitMQ
 ## Setting up environment
     1.Clone this repository from GitHub.
     2.Edit .env and set necessary user/password for Postgres.
     3.Run make deploy.
     4.Run make migrate.
-    5.Delete all from containers/postgres/ if something exist in it.
+    5.Run make seed. 
+
 ## Start and stop environment
 Please use next make commands in order to start and stop environment:
     
