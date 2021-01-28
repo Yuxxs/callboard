@@ -17,17 +17,8 @@ class RolesSeeder extends Seeder
     public function run()
     {
 
-        DB::table('roles')->insert(
-            [
-                'id' => Str::uuid(),
-                'name' => 'Пользователь',
-                'slug' => 'guest',
-            ]
-        );
-        Role::where('slug',  'guest')->first()->permissions()->attach([
-            DB::table('permissions')
-                ->where('slug', '=', 'register')->value('id'),
-        ]);
+
+
 
         DB::table('roles')->insert(
             [

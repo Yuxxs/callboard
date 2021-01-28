@@ -7,11 +7,10 @@
                 <div class="card">
                     <div class="card-header">{{ __('Список пользователей') }}</div>
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+
+                       <a href="{{ route('admin.register_page') }}" class="btn btn-xs btn-info ">Зарегистрировать</a>
+                        <p>
+                        <div class="row-md-8">
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -37,6 +36,7 @@
 
                                 </tbody>
                             </table>
+                        </div>
                     </div>
                 </div>
             </div>

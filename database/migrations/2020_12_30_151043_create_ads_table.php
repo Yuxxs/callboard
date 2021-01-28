@@ -39,10 +39,10 @@ class CreateAdsTable extends Migration
             $table->string('description',200);
 
             $table->integer('cost')->unsigned();
-            #$table->index(['cost']);
+            $table->index(['cost']);
 
             $table->bigInteger('views_count')->unsigned();
-            #$table->index(['views_count']);
+            $table->index(['views_count']);
 
             $table->timestamps();
             $table->softDeletes();

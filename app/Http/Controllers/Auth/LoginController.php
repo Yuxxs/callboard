@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Http\Traits\RedirectToHome;
+
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
@@ -20,23 +21,10 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers,RedirectToHome;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected function redirectTo(): string
-    {
-        if(Auth::user()->role->slug=='admin')
-            return route('admin_home');
-        elseif(Auth::user()->role->slug=='moderator')
-            return route('moderator_home');
-        elseif(Auth::user()->role->slug=='user')
-            return route('user_home');
-        else return route('register');
-    }
+
+
 
     /**
      * Create a new controller instance.

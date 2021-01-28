@@ -2,10 +2,61 @@
 namespace Database\Seeders;
 class DataSeed
 {
-    public static function getCountries(){
+    public static function getCategories(): array
+    {
+        $categories = [
+            [1,'','Вещи, электроника и прочее','veshi-elektronika-i-prochee','description...'],
+
+
+
+            [2,'','Предложить свои услуги','predlozhit-svoi-uslugi','description...'],
+
+
+
+            [3,'','Заказать услугу','zakazat-uslugu','description...'],
+
+
+            [4,'','Недвижимость','nedvizhimost','description...'],
+
+
+
+            [5,'','Животные','zhivotnye','description...'],
+
+
+
+            [6,'','Легковые автомобили','legkovye-avtomobili','description...'],
+            [7,'1','Компьютерная техника','kompyuternaya-tehnika','description...'],
+
+
+            [8,'1','Хобби и развлечения','hobbi-i-razvlecheniya','description...'],
+            [9,'1','ТВ,аудио,видео','tvaudiovideo','description...'],
+            [10,'2','Обучение','obuchenie','description...'],
+            [11,'2','Мастер на час','master-na-chas','description...'],
+            [12,'2','Уборка','uborka','description...'],
+            [13,'3','Обучение','obuchenie_zakaz','description...'],
+            [14,'3','Мастер на час','master-na-chas_zakaz','description...'],
+            [15,'3','Уборка','uborka_zakaz','description...'],
+            [16,'4','Продажа квартиры','prodazha-kvartiry','description...'],
+            [17,'4','Продажа дома','prodazha-doma','description...'],
+            [18,'4','Продажа комнаты','prodazha-komnaty','description...'],
+            [19,'5','Кошки','koshki','description...'],
+            [20,'5','Птицы','pticy','description...'],
+            [21,'5','Рыбки','rybki','description...'],
+            [22,'7','Ноутбуки','noutbuki','description...'],
+            [23,'7','Компьютеры','kompyutery','description...'],
+            [24,'7','Мониторы','monitory','description...'],
+
+
+
+        ];
+        return $categories;
+    }
+    public static function getCountries(): array
+    {
         return [[1, 'Россия', 'russia']];
     }
-    public static function getRegions(){
+    public static function getRegions(): array
+    {
         return [[1, 'Республика Адыгея [Адыгея]',1],
             [2, 'Республика Башкортостан',1],
             [3, 'Республика Бурятия',1],
@@ -90,7 +141,7 @@ class DataSeed
             [87, 'Чукотский автономный округ',1],
             [89, 'Ямало-Ненецкий автономный округ',1]];
     }
-    public static function getCities()
+    public static function getCities(): array
     {
         return [[1, 'Авсюнино', 50, 'avsyunino'],
             [2, 'Андреевка', 50, 'andreevka'],

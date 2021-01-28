@@ -18,6 +18,19 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+
+        dl, ol, ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .imgPreview img {
+            padding: 8px;
+            max-width: 100px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -45,7 +58,7 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-                            
+
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>

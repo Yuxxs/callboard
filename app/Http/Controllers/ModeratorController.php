@@ -8,6 +8,6 @@ class ModeratorController extends Controller
 {
     public function index()
     {
-        return view('home/moderator');
+        return view('moderator/home');
     }
 }

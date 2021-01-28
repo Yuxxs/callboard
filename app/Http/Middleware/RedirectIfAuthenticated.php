@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Traits\RedirectToHome;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
@@ -17,19 +18,14 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return mixed
      */
+    use RedirectToHome;
     public function handle(Request $request, Closure $next, ...$guards)
     {
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                if(Auth::user()->role->slug=='admin')
-                    return redirect(route('admin_home'));
-                elseif(Auth::user()->role->slug=='moderator')
-                    return redirect(route('moderator_home'));
-                elseif(Auth::user()->role->slug=='user')
-                    return redirect(route('user_home'));
-                else abort(404);
+               redirect($this->redirectTo());
             }
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\RedirectToHome;
 use App\Models\Role;
 use App\Models\UserStatus;
 use App\Providers\RouteServiceProvider;
@@ -26,23 +27,9 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers,RedirectToHome;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected function redirectTo(): string
-    {
-            if(Auth::user()->role->slug=='user')
-                return route('user_home');
-            elseif(Auth::user()->role->slug=='moderator')
-                return route('moderator_home');
-            elseif(Auth::user()->role->slug=='admin')
-                return route('admin_home');
-            else return route('register');
-    }
+
 
     /**
      * Create a new controller instance.
@@ -60,7 +47,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:60'],
@@ -96,4 +83,5 @@ class RegisterController extends Controller
         $user->save();
         return $user;
     }
+
 }
