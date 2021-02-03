@@ -15,4 +15,8 @@ class Region extends Model
     {
         return $this->hasMany(City::class);
     }
+    public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

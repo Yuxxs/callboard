@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdStatus extends Model
 {
+
     use HasFactory,UuidTrait;
+    protected $table = 'ad_statuses';
     public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(Ad::class);

@@ -10,6 +10,16 @@ class Ad extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'ads';
+    protected $fillable = [
+        'id',
+        'name',
+        'description',
+        'cost',
+        'views_count',
+        'category_id',
+        'city_id',
+    ];
+    
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -24,7 +34,7 @@ class Ad extends Model
     }
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Category::class);
     }
     public function moderations(): \Illuminate\Database\Eloquent\Relations\hasMany
     {

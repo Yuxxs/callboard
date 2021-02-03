@@ -39,5 +39,25 @@ class UsersSeeder extends Seeder
 
             ]
         );
+
+        $role_id = DB::table('roles')
+            ->where('slug', '=', 'user')->value('id');
+        $status_id = DB::table('user_statuses')
+            ->where('slug', '=', 'active')->value('id');
+        DB::table('users')->insert(
+            [
+                'id' => Str::uuid(),
+                'name' => 'new',
+                'surname' => 'new',
+                'role_id' => $role_id,
+                'status_id' => $status_id,
+                'phone'=>'89278067745',
+                'email'=>'admin@example.com',
+                'email_verified_at'=> Carbon::now()->format('Y-m-d H:i:s'),
+                'password'=>bcrypt('tqA9pQtY4cPJ8ZP'),
+                'phone_calls_time'=>'timetimetime',
+
+            ]
+        );
     }
 }

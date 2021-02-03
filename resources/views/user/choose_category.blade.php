@@ -6,28 +6,39 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        @if(count($categories)>1)
+                        @if(!empty($categories))
                         @foreach($categories as $category)
-                            <div class="card-header" ><a href="{{route('user.choose_category',['id'=>$category->id])}}">{{ $category->name }}</a></div>
+                        
+                        <div class="card">
+                           
+                            <div class="card-header" ><a href="{{route('user.choose_category',['ad'=>$ad,'id'=>$category->id])}}">{{ $category->name }}</a></div>
                             <div class="card-body">
                                 @foreach($category->children as $subcategory)
-                                || <a>{{$subcategory->name}}</a>
+                                ||
+                                <a href="{{route('user.choose_category',['ad'=>$ad,'id'=>$subcategory->id])}}">
+                                 {{$subcategory->name}}
+                                </a>
                                 @endforeach
+                                
                             </div>
+                        </div>
+                        <p>
                         @endforeach
                         @else
-                        @foreach($categories as $category)
-                        <div class="card-header" ><a href="{{route('user.choose_category',['id'=>$category->id])}}">{{ $category->name }}</a></div>
+                        
+                        <div class="card ">
+                        <div class="card-header" >{{ $category->name }}</div>
                         <div class="card-body">
-                            <ul class="list-group">
+                            <ul class="list-group list-group-flush">
                                 @foreach($category->children as $subcategory)   
-                               <a href="{{route('user.choose_category',['id'=>$subcategory->id])}}">
+                               <a href="{{route('user.choose_category',['ad'=>$ad,'id'=>$subcategory->id])}}">
                                     <li class="list-group-item">{{$subcategory->name}}</li>
                                </a>
                                 @endforeach
                             </ul>
                         </div>
-                        @endforeach
+                        </div>
+                        
                         @endif
                        </div>
                    </div>

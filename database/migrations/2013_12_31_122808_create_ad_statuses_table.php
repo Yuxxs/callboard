@@ -16,6 +16,7 @@ class CreateAdStatusesTable extends Migration
         Schema::create('ad_statuses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name',40);
+            $table->string('slug',40)->unique();
             $table->timestamps();
         });
     }
