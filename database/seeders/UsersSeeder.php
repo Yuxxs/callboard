@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
-use App\Models\UserStatus;
+
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +19,7 @@ class UsersSeeder extends Seeder
     {
         //$role = Role::where('slug',  'admin')->first();
         //$status = UserStatus::where('slug',  'active')->first();
+
         $role_id = DB::table('roles')
             ->where('slug', '=', 'admin')->value('id');
         $status_id = DB::table('user_statuses')
@@ -31,11 +31,11 @@ class UsersSeeder extends Seeder
                 'surname' => 'All',
                 'role_id' => $role_id,
                 'status_id' => $status_id,
-                'phone'=>'89278067745',
-                'email'=>'admin@example.com',
-                'email_verified_at'=> Carbon::now()->format('Y-m-d H:i:s'),
-                'password'=>bcrypt('admin'),
-                'phone_calls_time'=>'timetimetime',
+                'phone' => '89278067545',
+                'email' => 'admin@example.com',
+                'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'password' => bcrypt('admin'),
+                'phone_calls_time' => 'timetimetime',
 
             ]
         );
@@ -51,11 +51,31 @@ class UsersSeeder extends Seeder
                 'surname' => 'new',
                 'role_id' => $role_id,
                 'status_id' => $status_id,
-                'phone'=>'89278067745',
-                'email'=>'admin@example.com',
-                'email_verified_at'=> Carbon::now()->format('Y-m-d H:i:s'),
-                'password'=>bcrypt('tqA9pQtY4cPJ8ZP'),
-                'phone_calls_time'=>'timetimetime',
+                'phone' => '89278467745',
+                'email' => 'new@new.com',
+                'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'password' => bcrypt('tqA9pQtY4cPJ8ZP'),
+                'phone_calls_time' => 'timetimetime',
+
+            ]
+        );
+
+        $role_id = DB::table('roles')
+            ->where('slug', '=', 'moderator')->value('id');
+        $status_id = DB::table('user_statuses')
+            ->where('slug', '=', 'active')->value('id');
+        DB::table('users')->insert(
+            [
+                'id' => Str::uuid(),
+                'name' => 'new2',
+                'surname' => 'new2',
+                'role_id' => $role_id,
+                'status_id' => $status_id,
+                'phone' => '89578056754',
+                'email' => 'new2@new.com',
+                'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'password' => bcrypt('tqA9pQtY4cPJ8ZP'),
+                'phone_calls_time' => 'timetimetime',
 
             ]
         );

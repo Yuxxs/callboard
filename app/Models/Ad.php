@@ -18,6 +18,7 @@ class Ad extends Model
         'views_count',
         'category_id',
         'city_id',
+        'created_at'
     ];
     
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -26,7 +27,7 @@ class Ad extends Model
     }
     public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(AdStatus::class);
     }
     public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -39,5 +40,13 @@ class Ad extends Model
     public function moderations(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(Moderation::class);
+    }
+    public function last_moderator_id()
+    {
+        $moderation=$this->moderations()->latest()->first();
+        if($moderation!=null)
+        return  $moderation->user->id;
+        else
+        return 'null';
     }
 }

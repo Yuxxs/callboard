@@ -50,7 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Role::class,'role_id');
+        return $this->belongsTo(Role::class);
     }
     public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

@@ -10,7 +10,9 @@ class Moderation extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'moderations';
-
+    protected $fillable = [
+        'id','publish','reason'
+    ];
     public function oldVersion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Moderation::class, 'previous_id');

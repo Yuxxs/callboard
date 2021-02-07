@@ -38,9 +38,8 @@
                                     <div class="input-group-prepend">
 
                                         <a id="category_button" class="btn btn-outline-secondary" type="button"
-                                            role="button" aria-pressed="true" 
-                                            href="{{ route('user.choose_category', ['ad'=>$ad->toArray(),'id' => $ad->category->parent->id]) }}"
-                                            >Изменить</a>
+                                            role="button" aria-pressed="true"
+                                            href="{{ route('user.choose_category', ['ad'=>$ad->toArray(),'category_id' => $ad->category->parent->id]) }}">Изменить</a>
 
                                     </div>
                                 </div>
@@ -138,8 +137,8 @@
 
                             <div class="col-md-6">
                                 <textarea class="form-control rounded-0 @error('description') is-invalid @enderror"
-                                    rows="2" id="description" name="description" 
-                                    required autocomplete="description" autofocus> {{$ad->description}}</textarea>
+                                    rows="2" id="description" name="description" required autocomplete="description"
+                                    autofocus> {{$ad->description}}</textarea>
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

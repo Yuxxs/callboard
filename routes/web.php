@@ -52,8 +52,11 @@ Route::middleware('verified')->group(function () {
     });
     Route::middleware(['access.route:moderator'])->group(function () {
         Route::get('/home/moderator', [App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
+        Route::post('ad/moderation/create', [App\Http\Controllers\ModeratorController::class, 'createModeration'])->name('moderator.create_moderation');
+        Route::post('ad/moderation/publish', [App\Http\Controllers\ModeratorController::class, 'publishAd'])->name('moderator.publish_ad');
     });
     Route::middleware(['access.route:user'])->group(function () {
+
         Route::get('/home', [App\Http\Controllers\UserController::class, 'index'])->name('user.home');
 
         Route::middleware(['access.ad'])->group(function () {
@@ -61,8 +64,10 @@ Route::middleware('verified')->group(function () {
             Route::get('/ad/edit', [App\Http\Controllers\AdController::class, 'editAd'])->name('user.edit_ad');
             Route::delete('/ad/delete', [App\Http\Controllers\AdController::class, 'deleteAd'])->name('user.delete_ad');
             Route::get('/ad/choose_category', [App\Http\Controllers\AdController::class, 'adChooseCategory'])->name('user.choose_category');
+            Route::post('/ad/send_to_moderation', [App\Http\Controllers\AdController::class, 'sendToModeration'])->name('user.send_ad');
         });
 
     });
-    Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('access.ad');
+    Route::get('/ad/moderation', [App\Http\Controllers\ModeratorController::class, 'moderation'])->name('ad.moderation')->middleware('show.ad');
+    Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('show.ad');
 });

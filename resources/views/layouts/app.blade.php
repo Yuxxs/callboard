@@ -33,6 +33,12 @@
             padding: 8px;
             max-width: 100px;
         }
+        .list-group{
+    max-height: 300px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
     </style>
 
 </head>

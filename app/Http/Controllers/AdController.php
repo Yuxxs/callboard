@@ -43,7 +43,6 @@ class AdController extends Controller
             $ad->user()->associate( $request->user());
             $ad->city()->associate($city);
             $ad->category()->associate($category);
-            $ad->save();
         } else {
             $ad->city()->associate($city);
             $ad->category()->associate($category);
@@ -57,7 +56,7 @@ class AdController extends Controller
             $files = Storage::disk('public')->files('uploads/' . $request->user()->id . '/' . $ad->id);
             Storage::disk('public')->delete($files);
         }
-
+        $ad->save();
         if ($request->hasfile('imageFile')) {
             $images = $request->file('imageFile');
 
@@ -67,29 +66,24 @@ class AdController extends Controller
             }
         }
 
-       
-        
-
-        
-
         return redirect(route('user.home'));
     }
 
     public function editAd(Request $request)
     {
-
         $cities = City::all();
         $regions = Region::all();
         $countries = Country::all();
-    
-        $ad = new Ad($request['ad']);
-       
-       
         
+        $ad = new Ad($request['ad']);     
         $imageFile =Storage::disk('public')->files('uploads/'.$request->user()->id.'/'.$ad->id);
         return view('user.edit_ad', ['ad' => $ad,'imageFile'=>$imageFile, 'cities' => $cities, 'regions' => $regions, 'countries' => $countries]);
     }
-
+    public function deleteAd(Request $request)
+    {
+        Ad::where('id', $request['id'])->delete();
+        return redirect(route('user.home'));
+    }
     public function adChooseCategory(Request $request)
     {
        
@@ -100,19 +94,26 @@ class AdController extends Controller
             $ad->city()->associate(City::all()->first());   
         }
         
-        if ($request->has('id')) {
-            $category = Category::where('id', $request['id'])->first();
+        if ($request->has('category_id')) {
+            $category = Category::where('id', $request['category_id'])->first();
             
             if (count($category->children) == 0) {
                 $ad->category()->associate($category);
                 return redirect(route('user.edit_ad', ['ad' => $ad->toArray()]));
             }
-        
             return view('user.choose_category', ['ad' => $ad->toArray(),'category' => $category]);
         } else {
             $categories = Category::all()->whereNull('parent_id');
             return view('user.choose_category', ['ad' => $ad->toArray(),'categories' => $categories]);
         }
         
+    }
+
+    public function sendToModeration(Request $request){
+        $ad=Ad::where('id', $request['id'])->first();
+        $status = AdStatus::where('slug','moderation')->first();
+        $ad->status()->associate($status);
+        $ad->save();
+        return redirect(route('ad',['id'=>$request['id']]));
     }
 }

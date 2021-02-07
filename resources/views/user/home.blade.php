@@ -4,19 +4,20 @@
 
 <div class="row equal">
 
-  
-    <nav class="col-md-2  sidebar border-right bg-light rounded-right">
-        
-        <div class="sidebar-header">
-          <h3>Меню</h3>
+
+  <nav class="col-md-2  sidebar border-right bg-light rounded-right">
+
+    <div class="sidebar-header">
+      <h3>Меню</h3>
+    </div>
+    <div class="bg-light border-right" id="sidebar-wrapper">
+
+      <div class="list-group list-group-flush">
+        <a href="{{route('user.choose_category')}}" class="list-group-item list-group-item-action bg-light">Создать
+          обьявление</a>
+
       </div>
-      <div class="bg-light border-right" id="sidebar-wrapper">
-         
-          <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action bg-light">Создать обьявление</a>
-       
-          </div>
-        </div>
+    </div>
   </nav>
 
   <div class="col-sm-8 d-flex pb-3 flex-wrap">
@@ -35,18 +36,31 @@
         </svg>
         @endif
         <h3 style="position: absolute ;"><span class="badge badge-secondary">{{$ad->category->name}}</span></h3>
-        <div class="card-body">
-          <h2 class="card-title">{{$ad->name}}</h2>
 
-          <p class="card-text">{{$ad->description}}</p>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h2 class="card-title">{{$ad->name}}</h2>
+            </div>
+            <div class="col">
+              <form action="{{ route('user.delete_ad',['id'=>$ad->id]) }}" method="POST">
+                @method('DELETE')
+                @csrf
+              <button type="submit"
+                class="btn btn-danger close"><span aria-hidden="true">&times;</span></button>
+              </form>
+            </div>
+          </div>
+          <p class="card-text text-truncate" style="width: 17rem;">{{$ad->description}}</p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
               <a href="{{ route('ad',['id'=>$ad->id]) }}" type="button"
                 class="btn btn-sm btn-outline-secondary">Открыть</a>
               <a href="{{ route('user.edit_ad',['ad'=>$ad->toArray()]) }}" type="button"
                 class="btn btn-sm btn-outline-secondary">Изменить</a>
+
             </div>
-            <small class="text-muted">:Просмотров: {{$ad->views_count}}</small>
+            <small class="text-muted">Просмотров: {{$ad->views_count}}</small>
           </div>
         </div>
       </div>

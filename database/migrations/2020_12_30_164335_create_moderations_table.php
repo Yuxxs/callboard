@@ -16,7 +16,7 @@ class CreateModerationsTable extends Migration
         Schema::create('moderations', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->uuid('previous_id')->unique();
+            $table->uuid('previous_id')->unique()->nullable();
 
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
@@ -27,11 +27,10 @@ class CreateModerationsTable extends Migration
                 ->onDelete('cascade');
             $table->index(['ad_id']);
 
-            $table->string('decision',36);
-            $table->index(['decision']);
+            $table->boolean('publish');//true - опубликовать,false -  отправить на доработку
+            $table->index(['publish']);
 
             $table->string('reason',80);
-            $table->timestamp('moderation_date');
             $table->timestamps();
 
         });
