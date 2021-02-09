@@ -25,9 +25,9 @@
     <div class="col-sm-4 d-flex pb-3">
       <div class="card mb-4 shadow-sm">
 
-        @if(count(Storage::disk('public')->files('uploads/'.Auth::user()->id.'/'.$ad->id))>0)
+        @if(count(Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id))>0)
         <img class="bd-placeholder-img card-img-top" width="100%" height="225"
-          src="{{asset('storage/'.Storage::disk('public')->files('uploads/'.Auth::user()->id.'/'.$ad->id)[0])}}" />
+          src="{{asset('storage/'.Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id)[0])}}" />
         @else
         <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
@@ -35,12 +35,12 @@
           <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">
         </svg>
         @endif
-        <h3 style="position: absolute ;"><span class="badge badge-secondary">{{$ad->category->name}}</span></h3>
+        <h3 style="position: absolute ;"><span class="badge badge-secondary">{{$ad->city->name}}</span></h3>
 
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h2 class="card-title">{{$ad->name}}</h2>
+              <h2 class="card-title">{{$ad->cost}}&#8381</h2>
             </div>
             <div class="col">
               <form action="{{ route('user.delete_ad',['id'=>$ad->id]) }}" method="POST">
@@ -51,7 +51,7 @@
               </form>
             </div>
           </div>
-          <p class="card-text text-truncate" style="width: 17rem;">{{$ad->description}}</p>
+          <h4 class="card-texttext-truncate" style="width: 17rem;">{{$ad->name}}</h4>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
               <a href="{{ route('ad',['id'=>$ad->id]) }}" type="button"

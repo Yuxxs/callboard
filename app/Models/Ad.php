@@ -20,7 +20,10 @@ class Ad extends Model
         'city_id',
         'created_at'
     ];
-    
+    public function incrementViewCount() {
+        $this->views_count++;
+        return $this->save();
+    }
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes(['verify' => true]);
 
@@ -70,4 +68,6 @@ Route::middleware('verified')->group(function () {
     });
     Route::get('/ad/moderation', [App\Http\Controllers\ModeratorController::class, 'moderation'])->name('ad.moderation')->middleware('show.ad');
     Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('show.ad');
+    Route::get('/{city_id?}/{category_id?}', [App\Http\Controllers\AdController::class, 'searchAds'])->name('ad.search');
+
 });

@@ -20,6 +20,7 @@ services:
    redis:
       image: redis:alpine
       container_name: ${COMPOSE_PROJECT_NAME}_redis
+      restart: unless-stopped
       ports:
        - 6379:6379
       volumes:
@@ -30,6 +31,7 @@ services:
    mailhog:
       image: mailhog/mailhog
       container_name: ${COMPOSE_PROJECT_NAME}_mailhog
+      restart: unless-stopped
       environment:
         MAIL_MAILER: ${MAIL_MAILER}
         MAIL_HOST: ${MAIL_HOST}
@@ -48,6 +50,7 @@ services:
    rabbitmq:
       image: rabbitmq:management
       container_name: ${COMPOSE_PROJECT_NAME}_rabbitmq
+      restart: unless-stopped
       environment:
         RABBITMQ_DEFAULT_USER: guest
         RABBITMQ_DEFAULT_PASSWORD: guest

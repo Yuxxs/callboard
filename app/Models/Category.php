@@ -17,7 +17,7 @@ class Category extends Model
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'id');
     }
 
     public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany

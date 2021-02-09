@@ -33,20 +33,43 @@
             padding: 8px;
             max-width: 100px;
         }
-        .list-group{
-    max-height: 300px;
-    margin-bottom: 10px;
-    overflow:scroll;
-    -webkit-overflow-scrolling: touch;
-}
-    </style>
 
+        .list-group {
+            max-height: 300px;
+            margin-bottom: 10px;
+            overflow: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dropdown-menu .dropdown-menu {
+            top: auto;
+            left: 100%;
+            transform: translateY(-2rem);
+        }
+
+        .dropdown-item+.dropdown-menu {
+            display: none;
+        }
+
+        .dropdown-item.submenu::after {
+            content: '▸';
+            margin-left: 0.5rem;
+        }
+
+        .dropdown-item:hover+.dropdown-menu,
+        .dropdown-menu:hover {
+            display: block;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous">
+    </script>
 </head>
 
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm flex-md-nowrap">
             <div class="container">
+
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Callboard') }}
                 </a>
@@ -58,11 +81,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Категории
+                        </button>
+                        @include('category_manage_child',['categories' => $categories])
+                    </div>
                     <ul class="navbar-nav mr-auto">
-                        <form class="form-inline">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Поиск объявления" aria-label="Поиск объявления">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
-                          </form>
+                        <form class="form-inline"
+                            action="{{route('ad.search',['category_id'=>$current_category->id??null,'city_id'=>$current_city->id??null])}}">
+                            <input name="name" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
+                                aria-label="Поиск объявления" value="{{ $current_name??''}}">
+                            <button type="submit" class="btn btn-outline-success">Найти</button>
+                        </form>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
