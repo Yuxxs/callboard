@@ -10,6 +10,7 @@ class Role extends Model
     use HasFactory,UuidTrait;
 
     protected $table = 'roles';
+    protected  $primaryKey = 'id';
     public function permissions(): \Illuminate\Database\Eloquent\Relations\belongsToMany
     {
         return $this->belongsToMany(Permission::class);

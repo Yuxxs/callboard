@@ -10,6 +10,7 @@ class Category extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'categories';
+    protected  $primaryKey = 'id';
     public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');

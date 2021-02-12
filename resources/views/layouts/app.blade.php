@@ -16,7 +16,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
@@ -90,8 +90,8 @@
                     <ul class="navbar-nav mr-auto">
                         <form class="form-inline"
                             action="{{route('ad.search',['category_id'=>$current_category->id??null,'city_id'=>$current_city->id??null])}}">
-                            <input name="name" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
-                                aria-label="Поиск объявления" value="{{ $current_name??''}}">
+                            <input name="text" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
+                                aria-label="Поиск объявления" value="{{ $current_text??''}}">
                             <button type="submit" class="btn btn-outline-success">Найти</button>
                         </form>
                     </ul>
@@ -122,7 +122,7 @@
                                 href="{{ route('user.home') }}"
                                 @endif
                                 >
-                                {{ __('Мой профиль') }}</a>
+                                {{ __('Моя страница') }}</a>
                         </li>
 
 

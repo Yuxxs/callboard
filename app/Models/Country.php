@@ -9,4 +9,10 @@ class Country extends Model
 {
     use HasFactory,UuidTrait;
     protected $table ='countries';
+    protected  $primaryKey = 'id';
+    public function regions(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Region::class);
+    }
+    
 }

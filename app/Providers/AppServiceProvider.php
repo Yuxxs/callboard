@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
-use App\Models\City;
-use App\Models\Country;
+use App\Models\Region;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -28,14 +27,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {    
-        
-        if(Schema::hasTable('categories')){
+        if(Schema::hasTable('categories'))
+        {
             $categories=Category::whereNull('parent_id')->get();
             View::share('categories',$categories);
         }
-        if(Schema::hasTable('countries')){
-            $countries=Country::all();
-            View::share('countries',$countries);
+        
+        if(Schema::hasTable('regions'))
+        {
+            $regions=Region::all();
+            View::share('regions',$regions);
         }
     }
 }

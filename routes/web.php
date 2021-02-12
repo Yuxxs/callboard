@@ -45,8 +45,9 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::middleware('verified')->group(function () {
     Route::middleware(['access.route:admin'])->group(function () {
         Route::get('/home/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.home');
-        Route::get('/home/admin/register_page', [App\Http\Controllers\AdminController::class, 'showRegistrationForm'])->name('admin.register_page');
-        Route::post('/home/admin/register_user', [App\Http\Controllers\AdminController::class, 'registerUser'])->name('admin.register_user');
+        Route::get('/home/admin/edit_user/{id?}', [App\Http\Controllers\AdminController::class, 'editUser'])->name('admin.edit_user');
+        Route::post('/home/admin/save_user', [App\Http\Controllers\AdminController::class, 'saveUser'])->name('admin.save_user');
+        Route::delete('/home/admin/delete_user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('admin.delete_user');
     });
     Route::middleware(['access.route:moderator'])->group(function () {
         Route::get('/home/moderator', [App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
@@ -68,6 +69,6 @@ Route::middleware('verified')->group(function () {
     });
     Route::get('/ad/moderation', [App\Http\Controllers\ModeratorController::class, 'moderation'])->name('ad.moderation')->middleware('show.ad');
     Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('show.ad');
-    Route::get('/{city_id?}/{category_id?}', [App\Http\Controllers\AdController::class, 'searchAds'])->name('ad.search');
+    Route::get('{region_id?}/{city_id?}/{category_id?}', [App\Http\Controllers\AdController::class, 'searchAds'])->name('ad.search');
 
 });

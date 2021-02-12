@@ -10,6 +10,7 @@ class Moderation extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'moderations';
+    protected  $primaryKey = 'id';
     protected $fillable = [
         'id','publish','reason'
     ];

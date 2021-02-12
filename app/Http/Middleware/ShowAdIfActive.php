@@ -29,6 +29,7 @@ class ShowAdIfActive
             $user = $request->user();
             if (
                 $user->role->slug='moderator'
+                || $user->role->slug='admin'
                 || $user->id == $ad->user->id
             ) {
                 return $next($request);

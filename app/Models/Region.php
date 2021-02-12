@@ -11,6 +11,7 @@ class Region extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'regions';
+    protected  $primaryKey = 'id';
     public function cities(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(City::class);

@@ -11,6 +11,7 @@ class AdStatus extends Model
 
     use HasFactory,UuidTrait;
     protected $table = 'ad_statuses';
+    protected  $primaryKey = 'id';
     public function ads(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(Ad::class);

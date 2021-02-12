@@ -10,6 +10,7 @@ class Ad extends Model
 {
     use HasFactory,UuidTrait;
     protected $table = 'ads';
+    protected  $primaryKey = 'id';
     protected $fillable = [
         'id',
         'name',

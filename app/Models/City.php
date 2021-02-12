@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory,UuidTrait;
-
+    protected  $primaryKey = 'id';
     public function region(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Region::class);

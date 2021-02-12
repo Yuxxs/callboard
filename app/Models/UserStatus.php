@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserStatus extends Model
 {
     use HasFactory,UuidTrait;
+    protected  $primaryKey = 'id';
     public function users(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(User::class);

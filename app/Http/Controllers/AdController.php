@@ -10,7 +10,6 @@ use App\Models\Ad;
 use App\Models\AdStatus;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -20,41 +19,49 @@ class AdController extends Controller
     public function index(Request $request)
     {
         $ad = Ad::where('id', $request['id'])->first();
-        if ($request->user()->id != $ad->user->id) {
+        if ($request->user()->id != $ad->user->id) 
+        {
             $ad->incrementViewCount();
         }
         return view('ad', ['ad' => $ad]);
     }
-    public function searchAds(Request $request, $category_id = null, $city_id = null)
+    public function searchAds(Request $request, $category_id = null, $city_id = null,$region_id=null)
     {
         $ads = Ad::whereHas('status', function ($query) {
             $query->where('slug', 'active');
         });
         $current_category = null;
         $current_city = null;
-        
+        $current_region =null;
+
         if ($category_id) {
             $current_category = Category::where('id', $category_id)->first();
             $ads = $ads->where('category_id', $category_id);
           #wherein
         }
+        if ($region_id) { 
+            $current_region = Region::where('id', $region_id)->first();
+            $ads = $ads->whereHas('city', function ($query) use($region_id)  {
+                $query->where('region_id',$region_id);
+            });
+        }
         if ($city_id) {
             $ads = $ads->where('city_id', $city_id);
             $current_city = City::where('id', $city_id)->first();
         }
-        if($request['name']){
-            $ads = $ads->where('name','LIKE',"%".$request['name']."%");
+        if($request['text']){
+            $ads = $ads->where('name','LIKE',"%".$request['text']."%")->orWhere('description','LIKE',"%".$request['text']."%");
         }
         $ads = $ads->get();
 
-        return view('search_ads', ['ads' => $ads,'current_name'=>$request['name'], 'current_category' => $current_category, 'current_city' => $current_city]);
+        return view('search_ads', ['ads' => $ads,'current_text'=>$request['text'], 'current_category' => $current_category, 'current_city' => $current_city,'current_region'=>$current_region]);
     }
     public function saveAd(Request $request)
     {
         $ad = Ad::where('id', $request['id'])->first();
-
         $category = Category::where('id', $request['category_id'])->first();
         $city = City::where('id', $request['cities_select'])->first();
+
         if (is_null($ad)) {
             $ad = new Ad(
                 [

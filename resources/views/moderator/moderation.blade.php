@@ -27,7 +27,7 @@
 
             @endif 
             @if(Auth::check())
-            @if(Auth::user()->role()->first()->slug=='moderator')
+            @if(Auth::user()->role()->first()->slug=='moderator'||  Auth::user()->role()->first()->slug='admin')
             <form method="POST" action="{{ route('moderator.create_moderation',['id'=>$ad->id]) }}">
                 @csrf
                 <div class="form-group row">
