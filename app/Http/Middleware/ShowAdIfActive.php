@@ -27,6 +27,7 @@ class ShowAdIfActive
             $ad->status->slug == 'sketch'
         ) {
             $user = $request->user();
+            if($user)
             if (
                 $user->role->slug='moderator'
                 || $user->role->slug='admin'

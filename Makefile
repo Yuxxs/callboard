@@ -67,3 +67,5 @@ seed:
 	@make exec cmd="php artisan db:seed --force"
 config-cache:
 	@make exec cmd="php artisan config:cache"
+storage-link:
+	@make exec cmd="php artisan storage:link"

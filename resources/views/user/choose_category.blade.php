@@ -1,48 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
 
-            @if(!empty($categories))
-            @foreach($categories as $category)
+                @if($category??false)
 
-            <div class="card">
+                    <div class="card ">
+                        <div class="card-header">{{ $category->name }}</div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                @foreach($category->children as $subcategory)
+                                    <a href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$subcategory->id])}}">
+                                        <li class="list-group-item">{{$subcategory->name}}</li>
+                                    </a>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
 
-                <div class="card-header"><a
-                        href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$category->id])}}">{{ $category->name }}</a>
-                </div>
-                <div class="card-body">
-                    @foreach($category->children as $subcategory)
-                    ||
-                    <a href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$subcategory->id])}}">
-                        {{$subcategory->name}}
-                    </a>
+                @else
+                    @foreach($categories as $category)
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                <a href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$category->id])}}">
+                                    {{ $category->name }}
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                @foreach($category->children as $subcategory)
+                                    ||
+                                    <a href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$subcategory->id])}}">
+                                        {{$subcategory->name}}
+                                    </a>
+                                @endforeach
+
+                            </div>
+                        </div>
+                        <p>
                     @endforeach
 
-                </div>
-            </div>
-            <p>
-                @endforeach
-                @else
-
-                <div class="card ">
-                    <div class="card-header">{{ $category->name }}</div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            @foreach($category->children as $subcategory)
-                            <a href="{{route('user.choose_category',['ad'=>$ad,'category_id'=>$subcategory->id])}}">
-                                <li class="list-group-item">{{$subcategory->name}}</li>
-                            </a>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-
                 @endif
-        </div>
+            </div>
 
+        </div>
     </div>
-</div>
 @endsection

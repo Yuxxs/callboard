@@ -19,43 +19,47 @@ class AdController extends Controller
     public function index(Request $request)
     {
         $ad = Ad::where('id', $request['id'])->first();
-        if ($request->user()->id != $ad->user->id) 
-        {
+        if ($request->user()->id != $ad->user->id) {
             $ad->incrementViewCount();
         }
         return view('ad', ['ad' => $ad]);
     }
-    public function searchAds(Request $request, $category_id = null, $city_id = null,$region_id=null)
+
+    public function searchAds(Request $request, $category_id = null, $city_id = null, $region_id = null)
     {
         $ads = Ad::whereHas('status', function ($query) {
             $query->where('slug', 'active');
         });
+
         $current_category = null;
         $current_city = null;
-        $current_region =null;
+        $current_region = null;
 
         if ($category_id) {
             $current_category = Category::where('id', $category_id)->first();
             $ads = $ads->where('category_id', $category_id);
-          #wherein
+            #wherein
         }
-        if ($region_id) { 
+        if ($region_id) {
             $current_region = Region::where('id', $region_id)->first();
-            $ads = $ads->whereHas('city', function ($query) use($region_id)  {
-                $query->where('region_id',$region_id);
+            $ads = $ads->whereHas('city', function ($query) use ($region_id) {
+                $query->where('region_id', $region_id);
             });
         }
         if ($city_id) {
             $ads = $ads->where('city_id', $city_id);
             $current_city = City::where('id', $city_id)->first();
         }
-        if($request['text']){
-            $ads = $ads->where('name','LIKE',"%".$request['text']."%")->orWhere('description','LIKE',"%".$request['text']."%");
+        if ($request['text']) {
+            $text = $request['text'];
+            $ads = $ads->where(function ($q) use ($text) {
+                $q->where('name', 'LIKE', "%" . $text . "%")->orWhere('description', 'LIKE', "%" . $text . "%");
+            });
         }
         $ads = $ads->get();
-
-        return view('search_ads', ['ads' => $ads,'current_text'=>$request['text'], 'current_category' => $current_category, 'current_city' => $current_city,'current_region'=>$current_region]);
+        return view('search_ads', ['ads' => $ads, 'current_text' => $request['text'], 'current_category' => $current_category, 'current_city' => $current_city, 'current_region' => $current_region]);
     }
+
     public function saveAd(Request $request)
     {
         $ad = Ad::where('id', $request['id'])->first();
@@ -65,7 +69,6 @@ class AdController extends Controller
         if (is_null($ad)) {
             $ad = new Ad(
                 [
-                    'id' => $request['id'],
                     'name' => $request['name'],
                     'description' => $request['description'],
                     'cost' => $request['cost'],
@@ -81,7 +84,6 @@ class AdController extends Controller
             $ad->city()->associate($city);
             $ad->category()->associate($category);
             $ad->update([
-                'id' => $request['id'],
                 'name' => $request['name'],
                 'description' => $request['description'],
                 'cost' => $request['cost'],
@@ -109,42 +111,53 @@ class AdController extends Controller
         $regions = Region::all();
         $countries = Country::all();
 
-        $ad = new Ad($request['ad']);
+        if ($request['ad']) {
+            if ($request['ad']['id'])
+                $ad = new Ad($request['ad']);
+
+        } else {
+            $ad = new Ad();
+            $ad->city()->associate(City::all()->first());
+        }
+
+        if ($request['category_id']) {
+            $category = Category::find($request['category_id']);
+            $ad->category()->associate($category);
+        }
+
         $imageFile = Storage::disk('public')->files('uploads/' . $request->user()->id . '/' . $ad->id);
         return view('user.edit_ad', ['ad' => $ad, 'imageFile' => $imageFile, 'cities' => $cities, 'regions' => $regions, 'countries' => $countries]);
     }
+
     public function deleteAd(Request $request)
     {
         Ad::where('id', $request['id'])->delete();
         return redirect(route('user.home'));
     }
+
     public function adChooseCategory(Request $request)
     {
 
-        if ($request->has('ad')) {
+        if ($request['ad'])
             $ad = new Ad($request['ad']);
-        } else {
-            $ad = new Ad(['id' => strval(Str::uuid())]);
-            $ad->city()->associate(City::all()->first());
-        }
-
-        if ($request->has('category_id')) {
-            $category = Category::where('id', $request['category_id'])->first();
+        else $ad = new Ad();
+        if ($request['category_id']) {
+            $category = Category::find($request['category_id']);
 
             if (count($category->children) == 0) {
-                $ad->category()->associate($category);
-                return redirect(route('user.edit_ad', ['ad' => $ad->toArray()]));
+                return redirect(route('user.edit_ad', ['ad' => $ad->toArray(), 'category_id' => $request['category_id']]));
             }
-            return view('user.choose_category', ['ad' => $ad->toArray(), 'category' => $category]);
+
+            return view('user.choose_category', ['ad' => $ad, 'category' => $category]);
         } else {
             $categories = Category::all()->whereNull('parent_id');
-            return view('user.choose_category', ['ad' => $ad->toArray(), 'categories' => $categories]);
+            return view('user.choose_category', ['ad' => $ad, 'categories' => $categories]);
         }
     }
 
     public function sendToModeration(Request $request)
     {
-        $ad = Ad::where('id', $request['id'])->first();
+        $ad = Ad::find($request['id']);
         $status = AdStatus::where('slug', 'moderation')->first();
         $ad->status()->associate($status);
         $ad->save();

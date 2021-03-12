@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Styles -->
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
@@ -47,7 +48,7 @@
             transform: translateY(-2rem);
         }
 
-        .dropdown-item+.dropdown-menu {
+        .dropdown-item + .dropdown-menu {
             display: none;
         }
 
@@ -56,7 +57,7 @@
             margin-left: 0.5rem;
         }
 
-        .dropdown-item:hover+.dropdown-menu,
+        .dropdown-item:hover + .dropdown-menu,
         .dropdown-menu:hover {
             display: block;
         }
@@ -66,62 +67,61 @@
 </head>
 
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm flex-md-nowrap">
-            <div class="container">
+<div id="app">
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm flex-md-nowrap">
+        <div class="container">
 
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Callboard') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
+            <a class="navbar-brand" href="{{ url('/') }}">
+                {{ config('app.name', 'Callboard') }}
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-                            Категории
-                        </button>
-                        @include('category_manage_child',['categories' => $categories])
-                    </div>
-                    <ul class="navbar-nav mr-auto">
-                        <form class="form-inline"
-                            action="{{route('ad.search',['category_id'=>$current_category->id??null,'city_id'=>$current_city->id??null])}}">
-                            <input name="text" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
-                                aria-label="Поиск объявления" value="{{ $current_text??''}}">
-                            <button type="submit" class="btn btn-outline-success">Найти</button>
-                        </form>
-                    </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Категории
+                    </button>
+                    @include('category_manage_child',['categories' => $categories])
+                </div>
+                <ul class="navbar-nav mr-auto">
+                    <form class="form-inline"
+                          action="{{route('ad.search',['category_id'=>$current_category->id??null,'city_id'=>$current_city->id??null])}}">
+                        <input name="text" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
+                               aria-label="Поиск объявления" value="{{ $current_text??''}}">
+                        <button type="submit" class="btn btn-outline-success">Найти</button>
+                    </form>
+                </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    @guest
                         @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
                         @endif
 
                         @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
                         @endif
-                        @else
-
+                    @else
                         <li class="nav-item">
-                            <a class="nav-link" @if(Auth::user()->role->slug=='admin')
-                                href="{{ route('admin.home') }}"
-                                @elseif(Auth::user()->role->slug=='moderator')
-                                href="{{ route('moderator.home') }}"
-                                @elseif(Auth::user()->role->slug=='user')
-                                href="{{ route('user.home') }}"
-                                @endif
-                                >
+                            <a class="nav-link"
+                               href="{{ route('user.profile',['id'=>Auth::user()->id]) }}">
+                                {{ __('Профиль') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route(Auth::user()->role()->first()->slug.'.home') }}">
                                 {{ __('Моя страница') }}</a>
                         </li>
 
@@ -131,7 +131,7 @@
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
 
@@ -146,17 +146,17 @@
                                 </form>
                             </div>
                         </li>
-                        @endguest
+                    @endguest
 
-                    </ul>
-                </div>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <main class="py-4">
+        @yield('content')
+    </main>
+</div>
 </body>
 
 </html>

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 class Ad extends Model
 {
@@ -12,7 +13,6 @@ class Ad extends Model
     protected $table = 'ads';
     protected  $primaryKey = 'id';
     protected $fillable = [
-        'id',
         'name',
         'description',
         'cost',
@@ -21,7 +21,9 @@ class Ad extends Model
         'city_id',
         'created_at'
     ];
-    public function incrementViewCount() {
+
+    public function incrementViewCount(): bool
+    {
         $this->views_count++;
         return $this->save();
     }
@@ -45,12 +47,8 @@ class Ad extends Model
     {
         return $this->hasMany(Moderation::class);
     }
-    public function last_moderator_id()
+    public function last_moderator()
     {
-        $moderation=$this->moderations()->latest()->first();
-        if($moderation!=null)
-        return  $moderation->user->id;
-        else
-        return 'null';
+       return $this->moderations()->latest()->first();
     }
 }

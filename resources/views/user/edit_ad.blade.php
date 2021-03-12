@@ -31,15 +31,15 @@
 
                                     <span id="category" class="input-group-text" aria-describedby="category_button">
 
-                                        {{$ad->category->name}}
-                                        <input name="category_id" type="hidden" value="{{ $ad->category->id}}">
+                                        {{$ad->category->name??'Без категории'}}
+                                        <input name="category_id" type="hidden" value="{{ $ad->category->id??''}}">
 
                                     </span>
                                     <div class="input-group-prepend">
 
                                         <a id="category_button" class="btn btn-outline-secondary" type="button"
                                             role="button" aria-pressed="true"
-                                            href="{{ route('user.choose_category', ['ad'=>$ad->toArray(),'category_id' => $ad->category->parent->id]) }}">Изменить</a>
+                                            href="{{ route('user.choose_category', ['ad'=>$ad->toArray(),'category_id' => $ad->category->parent->id??'']) }}">Изменить</a>
 
                                     </div>
                                 </div>

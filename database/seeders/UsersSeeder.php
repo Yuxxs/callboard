@@ -54,7 +54,7 @@ class UsersSeeder extends Seeder
                 'phone' => '89278467745',
                 'email' => 'new@new.com',
                 'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'password' => bcrypt('tqA9pQtY4cPJ8ZP'),
+                'password' => bcrypt('new'),
                 'phone_calls_time' => 'timetimetime',
 
             ]
@@ -74,7 +74,7 @@ class UsersSeeder extends Seeder
                 'phone' => '89578056754',
                 'email' => 'new2@new.com',
                 'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'password' => bcrypt('tqA9pQtY4cPJ8ZP'),
+                'password' => bcrypt('new'),
                 'phone_calls_time' => 'timetimetime',
 
             ]

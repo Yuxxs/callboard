@@ -24,8 +24,14 @@
                         class="btn btn-primary">Изменить</a>
                 </div>
                 <div class="p-2 bd-highlight">
-                    <a href="{{ route('user.delete_ad',['ad'=>$ad->id]) }}" type="button"
-                        class="btn btn-primary">Удалить</a>
+                    <form action="{{ route('user.delete_ad',['id'=>$ad->id]) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit"
+                                class="btn btn-primary"> Удалить
+                        </button>
+                    </form>
+
                 </div>
                 @endif
                 @if(Auth::user()->id==$ad->user->id||Auth::user()->role->slug=='moderator')

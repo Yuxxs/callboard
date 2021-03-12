@@ -44,19 +44,19 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::middleware('verified')->group(function () {
     Route::middleware(['access.route:admin'])->group(function () {
-        Route::get('/home/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.home');
-        Route::get('/home/admin/edit_user/{id?}', [App\Http\Controllers\AdminController::class, 'editUser'])->name('admin.edit_user');
-        Route::post('/home/admin/save_user', [App\Http\Controllers\AdminController::class, 'saveUser'])->name('admin.save_user');
-        Route::delete('/home/admin/delete_user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('admin.delete_user');
+        Route::get('/admin/home', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.home');
+        Route::get('/admin/home/edit_user/{id?}', [App\Http\Controllers\AdminController::class, 'editUser'])->name('admin.edit_user');
+        Route::post('/admin/home/save_user', [App\Http\Controllers\AdminController::class, 'saveUser'])->name('admin.save_user');
+        Route::delete('/admin/home/delete_user/{id}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('admin.delete_user');
     });
     Route::middleware(['access.route:moderator'])->group(function () {
-        Route::get('/home/moderator', [App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
+        Route::get('/moderator/home/', [App\Http\Controllers\ModeratorController::class, 'index'])->name('moderator.home');
         Route::post('ad/moderation/create', [App\Http\Controllers\ModeratorController::class, 'createModeration'])->name('moderator.create_moderation');
         Route::post('ad/moderation/publish', [App\Http\Controllers\ModeratorController::class, 'publishAd'])->name('moderator.publish_ad');
     });
     Route::middleware(['access.route:user'])->group(function () {
 
-        Route::get('/home', [App\Http\Controllers\UserController::class, 'index'])->name('user.home');
+        Route::get('/user/home', [App\Http\Controllers\UserController::class, 'index'])->name('user.home');
 
         Route::middleware(['access.ad'])->group(function () {
             Route::post('/ad/save', [App\Http\Controllers\AdController::class, 'saveAd'])->name('user.save_ad');
@@ -67,8 +67,9 @@ Route::middleware('verified')->group(function () {
         });
 
     });
-    Route::get('/ad/moderation', [App\Http\Controllers\ModeratorController::class, 'moderation'])->name('ad.moderation')->middleware('show.ad');
-    Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('show.ad');
-    Route::get('{region_id?}/{city_id?}/{category_id?}', [App\Http\Controllers\AdController::class, 'searchAds'])->name('ad.search');
+    Route::get('/profile/{id}', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
 
+    Route::get('/ad/moderation', [App\Http\Controllers\ModeratorController::class, 'moderation'])->name('ad.moderation')->middleware('show.ad');
 });
+Route::get('/ad', [App\Http\Controllers\AdController::class, 'index'])->name('ad')->middleware('show.ad');
+Route::get('{region_id?}/{city_id?}/{category_id?}', [App\Http\Controllers\AdController::class, 'searchAds'])->name('ad.search');

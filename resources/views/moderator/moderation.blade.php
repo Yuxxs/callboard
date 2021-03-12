@@ -17,17 +17,17 @@
     <hr class="mt-2 mb-5">
     <div class="row">
         <div class="col-md-12">
-            @if($ad->moderations->count()>0)
-            <h5 class="mb-1">Причины отклонения к доработке</h5>
+            <h5 class="mb-1">Стадии модерации</h5>
             <ul class="list-group">
+                <li class="list-group-item @if(count($ad->moderations)==0) active @endif">Не проведена модерация</li>
                 @foreach($ad->moderations as $moderation)
                 <li class="list-group-item @if($ad->moderations()->latest()->first()->id==$moderation->id) active @endif">{{$moderation->reason}}</li>
                 @endforeach
             </ul>
 
-            @endif 
+
             @if(Auth::check())
-            @if(Auth::user()->role()->first()->slug=='moderator'||  Auth::user()->role()->first()->slug='admin')
+            @if(Auth::user()->role()->first()->slug=='moderator' ||  Auth::user()->role()->first()->slug=='admin')
             <form method="POST" action="{{ route('moderator.create_moderation',['id'=>$ad->id]) }}">
                 @csrf
                 <div class="form-group row">
@@ -65,7 +65,7 @@
             @endif
             @endif
         </div>
-       
+
     </div>
 
 </div>

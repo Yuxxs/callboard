@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ad;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserStatus;
@@ -18,7 +19,11 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('admin.home', ['users' => $users]);
+        $ads = Ad::whereHas('status', function ($query) {
+            $query->where('slug', 'moderation')->orWhere('slug','rejected');;
+        })->get();
+        return view('admin.home', ['users' => $users
+        ,'ads'=>$ads]);
     }
 
     public function editUser($id = null)
@@ -43,8 +48,8 @@ class AdminController extends Controller
             'surname' => ['required', 'string', 'max:60'],
             'middlename' => ['string', 'max:60'],
             'phone' => ['required', 'string', 'max:16' ],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => [ 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:60'],
+            'password' => [ 'string', 'max:60','min:8', 'confirmed'],
         ]);
     }
 
@@ -61,7 +66,6 @@ class AdminController extends Controller
 
         if (is_null($user)) {
             $user = new User( [
-                'id' => Str::uuid(),
                 'name' => $request['name'],
                 'surname' => $request['surname'],
                 'middlename' => $request['middlename'],

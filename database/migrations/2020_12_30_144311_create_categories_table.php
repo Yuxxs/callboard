@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('parent_id')->nullable();
             $table->index('parent_id');
-
+            //$table->tinyInteger('level')->unsigned()->default(0);
             $table->string('name',36);
             $table->string('slug',36)->unique();
             $table->string('description',200)->nullable();
