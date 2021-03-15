@@ -43,6 +43,7 @@ class ComplexCitiesSeeder extends Seeder
             DB::table('cities')->insert([
                 'id' => $id,
                 'name' => $cities[$i][1],
+                'slug' => $cities[$i][3],
                 'region_id' =>$regions_uuids[strval($cities[$i][2])]
             ]);
         }

@@ -26,7 +26,7 @@
         <div class="row equal">
             <div class="d-flex pb-3 flex-wrap">
                 @foreach($ads as $ad)
-                    <div class="col-sm-4 d-flex pb-3">
+                    <div class="d-flex pb-3">
                         <div class="card mb-4 shadow-sm">
 
                             @if(count(Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id))>0)

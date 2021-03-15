@@ -19,13 +19,14 @@ class AdController extends Controller
     public function index(Request $request)
     {
         $ad = Ad::where('id', $request['id'])->first();
-        if ($request->user()->id != $ad->user->id) {
-            $ad->incrementViewCount();
-        }
+        if ($request->user())
+            if ($request->user()->id != $ad->user->id) {
+                $ad->incrementViewCount();
+            }
         return view('ad', ['ad' => $ad]);
     }
 
-    public function searchAds(Request $request, $category_id = null, $city_id = null, $region_id = null)
+    public function searchAds(Request $request)
     {
         $ads = Ad::whereHas('status', function ($query) {
             $query->where('slug', 'active');
@@ -33,23 +34,23 @@ class AdController extends Controller
 
         $current_category = null;
         $current_city = null;
-        $current_region = null;
 
-        if ($category_id) {
-            $current_category = Category::where('id', $category_id)->first();
-            $ads = $ads->where('category_id', $category_id);
-            #wherein
-        }
-        if ($region_id) {
-            $current_region = Region::where('id', $region_id)->first();
-            $ads = $ads->whereHas('city', function ($query) use ($region_id) {
-                $query->where('region_id', $region_id);
+        $category_slug = $request["category_slug"];
+        $city_slug = $request["city_slug"];
+        if ($category_slug) {
+            $current_category = Category::where('slug', $category_slug)->first();
+            $ads = $ads->whereHas('category', function ($query) use ($category_slug) {
+                $query->where('slug', $category_slug);
             });
         }
-        if ($city_id) {
-            $ads = $ads->where('city_id', $city_id);
-            $current_city = City::where('id', $city_id)->first();
+
+        if ($city_slug) {
+            $current_city = City::where('slug', $city_slug)->first();
+            $ads = $ads->whereHas('city', function ($query) use ($city_slug) {
+                $query->where('slug', $city_slug);
+            });
         }
+
         if ($request['text']) {
             $text = $request['text'];
             $ads = $ads->where(function ($q) use ($text) {
@@ -57,7 +58,7 @@ class AdController extends Controller
             });
         }
         $ads = $ads->get();
-        return view('search_ads', ['ads' => $ads, 'current_text' => $request['text'], 'current_category' => $current_category, 'current_city' => $current_city, 'current_region' => $current_region]);
+        return view('search_ads', ['ads' => $ads, 'current_text' => $request['text'], 'current_category' => $current_category, 'current_city' => $current_city]);
     }
 
     public function saveAd(Request $request)
@@ -112,8 +113,10 @@ class AdController extends Controller
         $countries = Country::all();
 
         if ($request['ad']) {
-            if ($request['ad']['id'])
-                $ad = new Ad($request['ad']);
+            $ad = new Ad($request['ad']);
+            if ($request['ad']['id']){
+                $ad = Ad::find($request['ad']['id']);
+            }
 
         } else {
             $ad = new Ad();

@@ -28,9 +28,8 @@
             <div class="d-flex pb-3 flex-wrap">
 
                 @foreach($ads as $ad)
-                    <div class="col-md-4 d-flex pb-3">
+                    <div class="d-flex pb-3">
                         <div class="card mb-4 shadow-sm">
-
                             @if(count(Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id))>0)
                                 <img class="bd-placeholder-img card-img-top" width="100%" height="225"
                                      src="{{asset('storage/'.Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id)[0])}}"/>
@@ -50,7 +49,7 @@
                             </h3>
 
                             <div class="card-body">
-                                {{$ad->status->slug}}
+
                                 <h2 class="card-title">{{$ad->cost}}&#8381</h2>
                                 <h4 class="card-texttext-truncate" style="width: 17rem;">{{$ad->name}}</h4>
                                 <div class="d-flex justify-content-between align-items-center">

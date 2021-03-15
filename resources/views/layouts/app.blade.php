@@ -11,12 +11,20 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <!-- Styles -->
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -62,8 +70,8 @@
             display: block;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous">
-    </script>
+
+
 </head>
 
 <body>
@@ -82,21 +90,23 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-                        Категории
-                    </button>
-                    @include('category_manage_child',['categories' => $categories])
-                </div>
-                <ul class="navbar-nav mr-auto">
-                    <form class="form-inline"
-                          action="{{route('ad.search',['category_id'=>$current_category->id??null,'city_id'=>$current_city->id??null])}}">
+                <form method="GET" class="form-inline" action="{{route('ad.search')}}">
+                    @include('components.inputs.city_picker',['city_slug'=>$current_city->slug??null,'cities'=>$cities])
+                    <div class="dropdown">
+                        <button id="category_dropdown_button" class="btn dropdown-toggle bg-light border-light text-dark" type="button"
+                                data-toggle="dropdown">
+                            {{$current_category->name??'Категория'}}
+                        </button>
+                        <input type="hidden" name="category_slug" id="category_slug" value="{{$current_category->slug??''}}"/>
+                        @include('category_manage_child',['categories' => $categories])
+                    </div>
+                    <ul class="navbar-nav mr-auto">
                         <input name="text" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
                                aria-label="Поиск объявления" value="{{ $current_text??''}}">
                         <button type="submit" class="btn btn-outline-success">Найти</button>
-                    </form>
-                </ul>
 
+                    </ul>
+                </form>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
@@ -137,7 +147,7 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                    document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 

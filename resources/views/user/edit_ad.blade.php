@@ -8,9 +8,10 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
                 <div class="card-body">
 
-                    <form method="post" action="{{ route('user.save_ad',['id'=>$ad->id]) }}"
+                    <form method="post" action="{{ route('user.save_ad') }}"
                         enctype="multipart/form-data">
                         @csrf
+                        <input name="id" type="hidden" value="{{$ad->id??''}}">
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="user-image mb-3 text-center">

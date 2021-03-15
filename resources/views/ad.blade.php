@@ -85,6 +85,7 @@
                 </div>
             </div>
             <hr class="mt-2 mb-5">
+
             <div class="row">
                 <div class="col-md-3">
                     <div class="">
@@ -94,10 +95,11 @@
                 <div class="col-md-2">
 
                     <div class="text-nowrap">
-                        <p>{{$ad->category->parent->name}}</p>
+                        <p>@if($ad->category->parent){{$ad->category->parent->name}}@else{{$ad->category->name}}@endif</p>
                     </div>
                 </div>
             </div>
+            @if($ad->category->parent)
             <div class="row">
                 <div class="col-md-3">
                     <div class="">
@@ -111,6 +113,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <hr class="mt-2 mb-5">
             <div class="row">
                 <div class="col-md-3">

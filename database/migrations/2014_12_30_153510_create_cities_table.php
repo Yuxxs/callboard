@@ -20,7 +20,7 @@ class CreateCitiesTable extends Migration
             $table->foreign('region_id')->references('id')->on('regions')
                 ->onDelete('cascade');
             $table->index('region_id');
-
+            $table->string('slug',45);
             $table->string('name',45);
             $table->timestamps();
             $table->softDeletes();
