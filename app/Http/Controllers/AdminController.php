@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserStatus;
@@ -20,10 +21,10 @@ class AdminController extends Controller
     {
         $users = User::all();
         $ads = Ad::whereHas('status', function ($query) {
-            $query->where('slug', 'moderation')->orWhere('slug','rejected');;
+            $query->where('slug', 'moderation')->orWhere('slug', 'rejected');;
         })->get();
         return view('admin.home', ['users' => $users
-        ,'ads'=>$ads]);
+            , 'ads' => $ads]);
     }
 
     public function editUser($id = null)
@@ -41,15 +42,15 @@ class AdminController extends Controller
     }
 
 
-    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
+    private function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:60'],
             'surname' => ['required', 'string', 'max:60'],
-            'middlename' => ['string', 'max:60'],
-            'phone' => ['required', 'string', 'max:16' ],
+            'middlename' => ['string', 'max:60','nullable'],
+            'phone' => ['required', 'string', 'max:16'],
             'email' => ['required', 'string', 'email', 'max:60'],
-            'password' => [ 'string', 'max:60','min:8', 'confirmed'],
+            'password' => ['string', 'max:60', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -58,6 +59,7 @@ class AdminController extends Controller
         User::find($id)->delete();
         return redirect(route('admin.home'));
     }
+
     public function saveUser(Request $request)
     {
         $this->validator($request->all())->validate();
@@ -65,7 +67,7 @@ class AdminController extends Controller
         $user = User::find($request['id']);
 
         if (is_null($user)) {
-            $user = new User( [
+            $user = new User([
                 'name' => $request['name'],
                 'surname' => $request['surname'],
                 'middlename' => $request['middlename'],
@@ -74,13 +76,12 @@ class AdminController extends Controller
                 'password' => bcrypt($request['password']),
             ]);
         } else {
-            $user->update( [
+            $user->update([
                 'name' => $request['name'],
                 'surname' => $request['surname'],
                 'middlename' => $request['middlename'],
                 'phone' => $request['phone'],
                 'email' => $request['email'],
-                'password' => bcrypt($request['password']),
             ]);
         }
         $role = Role::where('slug', $request['role'])->first();
@@ -90,6 +91,52 @@ class AdminController extends Controller
         $user->status()->associate($status);
 
         $user->save();
+        return redirect(route('admin.home'));
+    }
+
+
+    public function saveCategory(Request $request, $id = null)
+    {
+        $data = $request->all();
+        $category = Category::find($id);
+
+        if ($category) {
+            Validator::make($data, Category::rules($id))->validate();
+            $category->update([
+                'name' => $request['name'],
+                'slug' => $request['slug'],
+                'description' => $request['description']
+            ]);
+        } else {
+            Validator::make($data, Category::rules())->validate();
+            $parent = Category::find($request['parent_id']);
+            $level = 0;
+            if ($parent) {
+                $cur = $parent;
+
+                while ($cur) {
+                    $cur = $cur->parent;
+                    $level += 1;
+                }
+
+
+
+            }
+            $category = new Category([
+                'name' => $request['name'],
+                'slug' => $request['slug'],
+                'description' => $request['description'],
+                'level'=>$level
+            ]);
+            $category->parent()->associate($parent);
+        }
+        $category->save();
+        return redirect(route('admin.home'));
+    }
+
+    public function deleteCategory(Request $request, $id)
+    {
+        Category::find($id)->delete();
         return redirect(route('admin.home'));
     }
 }

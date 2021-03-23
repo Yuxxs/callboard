@@ -11,14 +11,13 @@ use App\Models\AdStatus;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+
 
 class AdController extends Controller
 {
-
     public function index(Request $request)
     {
-        $ad = Ad::where('id', $request['id'])->first();
+        $ad = Ad::withTrashed()->find($request['id']);
         if ($request->user())
             if ($request->user()->id != $ad->user->id) {
                 $ad->incrementViewCount();
@@ -63,7 +62,7 @@ class AdController extends Controller
 
     public function saveAd(Request $request)
     {
-        $ad = Ad::where('id', $request['id'])->first();
+        $ad = Ad::withTrashed()->find( $request['id']);
         $category = Category::where('id', $request['category_id'])->first();
         $city = City::where('id', $request['cities_select'])->first();
 
@@ -96,13 +95,12 @@ class AdController extends Controller
         $ad->save();
         if ($request->hasfile('imageFile')) {
             $images = $request->file('imageFile');
-
-            foreach ($images as $image) {
+dd($request['imageFile']);
+            foreach ($request['imageFile'] as $image) {
                 $name = $image->getClientOriginalName();
                 $image->storeAs('uploads', $request->user()->id . '/' . $ad->id . '/' . $name, 'public');
             }
         }
-
         return redirect(route('user.home'));
     }
 
@@ -115,7 +113,7 @@ class AdController extends Controller
         if ($request['ad']) {
             $ad = new Ad($request['ad']);
             if ($request['ad']['id']){
-                $ad = Ad::find($request['ad']['id']);
+                $ad = Ad::withTrashed()->find($request['ad']['id']);
             }
 
         } else {
@@ -132,15 +130,17 @@ class AdController extends Controller
         return view('user.edit_ad', ['ad' => $ad, 'imageFile' => $imageFile, 'cities' => $cities, 'regions' => $regions, 'countries' => $countries]);
     }
 
-    public function deleteAd(Request $request)
+    public function deleteAd($id)
     {
-        Ad::where('id', $request['id'])->delete();
+        $ad =  Ad::withTrashed()->find($id);
+        $ad->status()->associate(AdStatus::where('slug','removed')->first()->id);
+        $ad->save();
+        $ad->delete();
         return redirect(route('user.home'));
     }
 
     public function adChooseCategory(Request $request)
     {
-
         if ($request['ad'])
             $ad = new Ad($request['ad']);
         else $ad = new Ad();
@@ -156,14 +156,5 @@ class AdController extends Controller
             $categories = Category::all()->whereNull('parent_id');
             return view('user.choose_category', ['ad' => $ad, 'categories' => $categories]);
         }
-    }
-
-    public function sendToModeration(Request $request)
-    {
-        $ad = Ad::find($request['id']);
-        $status = AdStatus::where('slug', 'moderation')->first();
-        $ad->status()->associate($status);
-        $ad->save();
-        return redirect(route('ad', ['id' => $request['id']]));
     }
 }

@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Http\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 
 class Ad extends Model
 {
-    use HasFactory,UuidTrait;
+    use HasFactory,UuidTrait,SoftDeletes;
     protected $table = 'ads';
     protected  $primaryKey = 'id';
     protected $fillable = [

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RedirectToHome;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 
 class LoginController extends Controller
@@ -23,7 +24,22 @@ class LoginController extends Controller
 
     use AuthenticatesUsers,RedirectToHome;
 
-
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'g-recaptcha-response' => 'required',
+        ]);
+    }
 
 
     /**

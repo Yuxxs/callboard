@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "anhskohbo/no-captcha": "^3.3",
         "elasticsearch/elasticsearch": "^7.10",
         "enqueue/amqp-bunny": "^0.10.4",
         "fideloper/proxy": "^4.4",

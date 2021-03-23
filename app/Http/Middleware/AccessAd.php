@@ -17,13 +17,13 @@ class AccessAd
      */
     public function handle(Request $request, Closure $next)
     {
-        
-        $ad = Ad::where('id',$request['id']??$request['ad']['id']??null)->first();
+
+        $ad = Ad::where('id',$request['id']??$request['ad']['id']??null)->withTrashed()->first();
         if (!is_null($ad)) {
 
             if ($request->user()->id != $ad->user->id) {
                 abort(403);
-            }           
+            }
             return $next($request);
         } else {
             return $next($request);

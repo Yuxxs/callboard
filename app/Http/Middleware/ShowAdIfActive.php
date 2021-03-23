@@ -17,14 +17,15 @@ class ShowAdIfActive
      */
     public function handle(Request $request, Closure $next)
     {
-        $ad =  Ad::where('id', $request['id']??$request['ad']['id'])->first();
+        $ad =  Ad::withTrashed()->find($request['id']??$request['ad']['id']);
 
         if ($ad->status->slug == 'active') {
             return $next($request);
         } elseif (
             $ad->status->slug == 'rejected' ||
             $ad->status->slug == 'moderation' ||
-            $ad->status->slug == 'sketch'
+            $ad->status->slug == 'sketch' ||
+            $ad->status->slug == 'removed'
         ) {
             $user = $request->user();
             if($user)

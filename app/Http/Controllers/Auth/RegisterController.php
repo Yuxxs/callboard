@@ -6,13 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RedirectToHome;
 use App\Models\Role;
 use App\Models\UserStatus;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+
 
 class RegisterController extends Controller
 {
@@ -56,6 +53,7 @@ class RegisterController extends Controller
             'phone' => ['required', 'string', 'max:16', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => ['required']
         ]);
     }
 
@@ -68,7 +66,6 @@ class RegisterController extends Controller
     protected function create(array $data): User
     {
         $user = new User([
-            'id' =>Str::uuid(),
             'name' => $data['name'],
             'surname' => $data['surname'],
             'middlename' => $data['middlename'],

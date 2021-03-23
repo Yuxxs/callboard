@@ -17,20 +17,20 @@ class ModeratorController extends Controller
     {
         $ads = Ad::whereHas('status', function ($query) {
             $query->where('slug', 'moderation')->orWhere('slug','rejected');;
-        })->get();
+        })->withTrashed()->get();
 
         return view('moderator.home',['ads'=>$ads]);
     }
 
     public function moderation(Request $request)
     {
-        $ad = Ad::where('id',$request['id'])->first();
+        $ad = Ad::withTrashed()->find($request['id']);
 
         return view('moderator.moderation',['ad'=>$ad]);
     }
     public function createModeration(Request $request)
     {
-        $ad = Ad::where('id',$request['id'])->first();
+        $ad = Ad::withTrashed()->find($request['id']);
         $status= AdStatus::where('slug','rejected')->first();
         $ad->status()->associate($status);
         $ad->save();

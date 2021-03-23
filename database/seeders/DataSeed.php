@@ -5,46 +5,46 @@ class DataSeed
     public static function getCategories(): array
     {
         $categories = [
-            [1,'','Вещи, электроника и прочее','veshi-elektronika-i-prochee','description...'],
+            [1,'','Вещи, электроника и прочее','veshi-elektronika-i-prochee','description...',0],
 
 
 
-            [2,'','Предложить свои услуги','predlozhit-svoi-uslugi','description...'],
+            [2,'','Предложить свои услуги','predlozhit-svoi-uslugi','description...',0],
 
 
 
-            [3,'','Заказать услугу','zakazat-uslugu','description...'],
+            [3,'','Заказать услугу','zakazat-uslugu','description...',0],
 
 
-            [4,'','Недвижимость','nedvizhimost','description...'],
-
-
-
-            [5,'','Животные','zhivotnye','description...'],
+            [4,'','Недвижимость','nedvizhimost','description...',0],
 
 
 
-            [6,'','Легковые автомобили','legkovye-avtomobili','description...'],
-            [7,'1','Компьютерная техника','kompyuternaya-tehnika','description...'],
+            [5,'','Животные','zhivotnye','description...',0],
 
 
-            [8,'1','Хобби и развлечения','hobbi-i-razvlecheniya','description...'],
-            [9,'1','ТВ,аудио,видео','tvaudiovideo','description...'],
-            [10,'2','Обучение','obuchenie','description...'],
-            [11,'2','Мастер на час','master-na-chas','description...'],
-            [12,'2','Уборка','uborka','description...'],
-            [13,'3','Обучение','obuchenie_zakaz','description...'],
-            [14,'3','Мастер на час','master-na-chas_zakaz','description...'],
-            [15,'3','Уборка','uborka_zakaz','description...'],
-            [16,'4','Продажа квартиры','prodazha-kvartiry','description...'],
-            [17,'4','Продажа дома','prodazha-doma','description...'],
-            [18,'4','Продажа комнаты','prodazha-komnaty','description...'],
-            [19,'5','Кошки','koshki','description...'],
-            [20,'5','Птицы','pticy','description...'],
-            [21,'5','Рыбки','rybki','description...'],
-            [22,'7','Ноутбуки','noutbuki','description...'],
-            [23,'7','Компьютеры','kompyutery','description...'],
-            [24,'7','Мониторы','monitory','description...'],
+
+            [6,'','Легковые автомобили','legkovye-avtomobili','description...',0],
+            [7,'1','Компьютерная техника','kompyuternaya-tehnika','description...',1],
+
+
+            [8,'1','Хобби и развлечения','hobbi-i-razvlecheniya','description...',1],
+            [9,'1','ТВ,аудио,видео','tvaudiovideo','description...',1],
+            [10,'2','Обучение','obuchenie','description...',1],
+            [11,'2','Мастер на час','master-na-chas','description...',1],
+            [12,'2','Уборка','uborka','description...',1],
+            [13,'3','Обучение','obuchenie_zakaz','description...',1],
+            [14,'3','Мастер на час','master-na-chas_zakaz','description...',1],
+            [15,'3','Уборка','uborka_zakaz','description...',1],
+            [16,'4','Продажа квартиры','prodazha-kvartiry','description...',1],
+            [17,'4','Продажа дома','prodazha-doma','description...',1],
+            [18,'4','Продажа комнаты','prodazha-komnaty','description...',1],
+            [19,'5','Кошки','koshki','description...',1],
+            [20,'5','Птицы','pticy','description...',1],
+            [21,'5','Рыбки','rybki','description...',1],
+            [22,'7','Ноутбуки','noutbuki','description...',2],
+            [23,'7','Компьютеры','kompyutery','description...',2],
+            [24,'7','Мониторы','monitory','description...',2],
 
 
 

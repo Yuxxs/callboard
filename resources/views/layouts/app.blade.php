@@ -11,20 +11,14 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-
     <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
     <!-- Styles -->
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -43,13 +37,7 @@
             max-width: 100px;
         }
 
-        .list-group {
-            max-height: 300px;
-            margin-bottom: 10px;
-            overflow: scroll;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        /*TreeDropdown*/
         .dropdown-menu .dropdown-menu {
             top: auto;
             left: 100%;
@@ -67,6 +55,48 @@
 
         .dropdown-item:hover + .dropdown-menu,
         .dropdown-menu:hover {
+            display: block;
+        }
+
+        /*TreeView*/
+        /* Remove default bullets */
+        ul, #myUL {
+            list-style-type: none;
+        }
+
+        /* Remove margins and padding from the parent ul */
+        #myUL {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the caret/arrow */
+        .caret {
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+
+        /* Create the caret/arrow with a unicode, and style it */
+        .caret::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+        .caret-down::before {
+            transform: rotate(90deg);
+        }
+
+        /* Hide the nested list */
+        .nested {
+            display: none;
+        }
+
+        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+        .active {
+            margin-left: 43px;
             display: block;
         }
     </style>
@@ -93,12 +123,12 @@
                 <form method="GET" class="form-inline" action="{{route('ad.search')}}">
                     @include('components.inputs.city_picker',['city_slug'=>$current_city->slug??null,'cities'=>$cities])
                     <div class="dropdown">
-                        <button id="category_dropdown_button" class="btn dropdown-toggle bg-light border-light text-dark" type="button"
+                        <button id="category_dropdown_button" class="btn dropdown-toggle bg-light text-dark" type="button"
                                 data-toggle="dropdown">
                             {{$current_category->name??'Категория'}}
                         </button>
                         <input type="hidden" name="category_slug" id="category_slug" value="{{$current_category->slug??''}}"/>
-                        @include('category_manage_child',['categories' => $categories])
+                        @include('components.category_dropdown_seed',['categories' => $categories])
                     </div>
                     <ul class="navbar-nav mr-auto">
                         <input name="text" class="form-control mr-sm-2" type="search" placeholder="Поиск объявления"
