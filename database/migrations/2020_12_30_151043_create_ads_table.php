@@ -41,7 +41,7 @@ class CreateAdsTable extends Migration
             $table->integer('cost')->unsigned();
             $table->index(['cost']);
 
-            $table->bigInteger('views_count')->unsigned();
+            $table->bigInteger('views_count')->unsigned()->default(0);
             $table->index(['views_count']);
 
             $table->timestamps();

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Http\Traits\UuidTrait;
+use App\Mail\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -70,4 +72,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Moderation::class);
     }
+
+
+    public function sendEmailVerificationNotification(){
+        $message = (new VerifyEmail($this))
+            ->onQueue('emails');
+        Mail::to($this->email)->queue($message);
+    }
+
+
 }

@@ -60,7 +60,7 @@ Route::middleware('verified')->group(function () {
             Route::get('/ad/edit', [App\Http\Controllers\AdController::class, 'editAd'])->name('user.edit_ad');
             Route::delete('/ad/{id}/delete', [App\Http\Controllers\AdController::class, 'deleteAd'])->name('user.delete_ad');
             Route::get('/ad/choose_category', [App\Http\Controllers\AdController::class, 'adChooseCategory'])->name('user.choose_category');
-            Route::post('/ad/send_to_moderation', [App\Http\Controllers\AdController::class, 'sendToModeration'])->name('user.send_ad');
+            Route::post('/ad/send_to_moderation', [App\Http\Controllers\UserController::class, 'sendToModeration'])->name('user.send_ad');
         });
 
     });

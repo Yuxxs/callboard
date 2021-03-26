@@ -17,12 +17,18 @@ class Ad extends Model
         'name',
         'description',
         'cost',
-        'views_count',
-        'category_id',
-        'city_id',
-        'created_at'
     ];
-
+    public static function rules($merge = []): array
+    {
+        return array_merge([
+            'name' => ['required', 'string', 'max:36'],
+            'description' => ['required', 'string', 'max:200'],
+            'cost' =>['required','int','min:0'],
+            'images'=>['required','array','max:10'],
+            'images.*' => ['image','mimes:jpeg,png,jpg,svg'],
+        ],
+            $merge);
+    }
     public function incrementViewCount(): bool
     {
         $this->views_count++;

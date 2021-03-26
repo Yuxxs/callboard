@@ -11,6 +11,7 @@ use App\Models\AdStatus;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 
 class AdController extends Controller
@@ -62,17 +63,16 @@ class AdController extends Controller
 
     public function saveAd(Request $request)
     {
-        $ad = Ad::withTrashed()->find( $request['id']);
+        $ad = Ad::withTrashed()->find($request['id']);
         $category = Category::where('id', $request['category_id'])->first();
         $city = City::where('id', $request['cities_select'])->first();
-
+        $this->validator($request->all())->validate();
         if (is_null($ad)) {
             $ad = new Ad(
                 [
                     'name' => $request['name'],
                     'description' => $request['description'],
                     'cost' => $request['cost'],
-                    'views_count' => 0
                 ]
             );
             $status = AdStatus::where('slug', 'sketch')->first();
@@ -93,15 +93,18 @@ class AdController extends Controller
             Storage::disk('public')->delete($files);
         }
         $ad->save();
-        if ($request->hasfile('imageFile')) {
-            $images = $request->file('imageFile');
-dd($request['imageFile']);
-            foreach ($request['imageFile'] as $image) {
+        if ($request->hasfile('images')) {
+            foreach ($request['images'] as $image) {
                 $name = $image->getClientOriginalName();
                 $image->storeAs('uploads', $request->user()->id . '/' . $ad->id . '/' . $name, 'public');
             }
         }
         return redirect(route('user.home'));
+    }
+
+    private function validator(array $data): \Illuminate\Contracts\Validation\Validator
+    {
+        return Validator::make($data, Ad::rules());
     }
 
     public function editAd(Request $request)
@@ -112,7 +115,7 @@ dd($request['imageFile']);
 
         if ($request['ad']) {
             $ad = new Ad($request['ad']);
-            if ($request['ad']['id']){
+            if ($request['ad']['id']) {
                 $ad = Ad::withTrashed()->find($request['ad']['id']);
             }
 
@@ -132,8 +135,8 @@ dd($request['imageFile']);
 
     public function deleteAd($id)
     {
-        $ad =  Ad::withTrashed()->find($id);
-        $ad->status()->associate(AdStatus::where('slug','removed')->first()->id);
+        $ad = Ad::withTrashed()->find($id);
+        $ad->status()->associate(AdStatus::where('slug', 'removed')->first()->id);
         $ad->save();
         $ad->delete();
         return redirect(route('user.home'));

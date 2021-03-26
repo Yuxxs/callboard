@@ -69,3 +69,5 @@ config-cache:
 	@make exec cmd="php artisan config:cache"
 storage-link:
 	@make exec cmd="php artisan storage:link"
+queue-work:
+	@make exec cmd="php artisan queue:work rabbitmq --queue=emails"

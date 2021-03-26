@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Traits\RedirectTo;
 use App\Http\Traits\RedirectToHome;
 use App\Providers\RouteServiceProvider;
 use Closure;
@@ -13,19 +14,21 @@ class RedirectIfAuthenticated
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  ...$guards
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param string|null ...$guards
      * @return mixed
      */
-    use RedirectToHome;
+    use RedirectTo;
+
     public function handle(Request $request, Closure $next, ...$guards)
     {
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-               redirect(route(Auth::user()->role->slug.'.home'));
+
+                redirect($this->redirectTo());
             }
         }
 

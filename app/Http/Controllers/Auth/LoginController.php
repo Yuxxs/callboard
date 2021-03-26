@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\RedirectTo;
 use App\Http\Traits\RedirectToHome;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -21,8 +22,40 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+    use AuthenticatesUsers,RedirectTo;
 
-    use AuthenticatesUsers,RedirectToHome;
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->clearLoginAttempts($request);
+            $request->session()->put('require_captcha',true);
+            return redirect()->route('login');
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
 
     /**
      * Validate the user login request.
@@ -34,14 +67,27 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        $request->validate([
-            $this->username() => 'required|string',
+        $validator_array = [
+           $this->username() => 'required|string',
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required',
-        ]);
+           ];
+        if($request->session()->get('require_captcha')){
+            array_merge($validator_array, ['g-recaptcha-response' => 'required']);
+        }
+        $request->validate($validator_array);
     }
 
-
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $request->session()->forget('require_captcha');
+    }
     /**
      * Create a new controller instance.
      *

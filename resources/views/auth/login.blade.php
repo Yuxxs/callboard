@@ -38,14 +38,15 @@
                                 @enderror
                             </div>
                         </div>
+                        @if(Session::has('require_captcha'))
                         <div class="form-group row offset-4">
-
                             {!! NoCaptcha::renderJs() !!}
                             {!! NoCaptcha::display() !!}
                             @error('g-recaptcha-response')
                             <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                             @enderror
                         </div>
+                        @endif
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AdForModeration;
 use App\Models\Ad;
 use App\Models\AdStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -25,6 +27,16 @@ class UserController extends Controller
         $status = AdStatus::where('slug', 'moderation')->first();
         $ad->status()->associate($status);
         $ad->save();
+
+        $moderators = User::whereHas('role', function ($query) {
+            $query->where('slug', 'moderator');
+        })->get();
+        $message = (new AdForModeration($ad))
+            ->onQueue('emails');
+        foreach ($moderators as $moderator) {
+            Mail::to($moderator->email)->queue($message);
+        }
+
         return redirect(route('ad', ['id' => $request['id']]));
     }
 }

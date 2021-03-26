@@ -46,16 +46,28 @@
 
                 </div>
 
-                <div class="row text-center text-lg-left">
-                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="row">
+                    <div id="carouselExampleControls" class="carousel slide " data-ride="carousel">
                         <div class="carousel-inner">
                             @for ($i = 0; $i < count(Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id)); $i++)
 
-                                <div class="carousel-item active">
-                                    <img class="img-fluid img-thumbnail" width="100%" height="225"
+                                <div class="carousel-item @if($i==0) active @endif">
+                                    <img class="img-fluid img-thumbnail" style =" width:800px; height:500px; object-fit:  contain;"
                                          src="{{asset('storage/'.Storage::disk('public')->files('uploads/'.$ad->user->id.'/'.$ad->id)[$i])}}"/>
                                 </div>
                             @endfor
+                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                    <span style="color: Mediumslateblue;">
+                                   <i class="fa fa-arrow-left fa-2x "></i>
+                                        </span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                     <span style="color: Mediumslateblue;">
+                                   <i class="fa fa-arrow-right fa-2x "></i>
+                                        </span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                         </div>
                     </div>
                 </div>

@@ -19,7 +19,7 @@
                                 </div>
 
                                 <div class="custom-file">
-                                    <input type="file" name="imageFile[]" class="custom-file-input" id="images"
+                                    <input type="file" name="images[]" class="custom-file-input" id="images"
                                         multiple>
                                     <label class="custom-file-label" for="images">Choose image</label>
                                 </div>
